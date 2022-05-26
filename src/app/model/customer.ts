@@ -13,4 +13,6 @@ export interface Customer {
   emailContatto: string;
   indirizzoSedeOperativa: Sede;
   indirizzoSedeLegale: Sede;
+  dataInserimento: string;
+  dataUltimoContatto: string;
 }

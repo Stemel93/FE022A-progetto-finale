@@ -10,9 +10,11 @@ import { ClientiService } from '../services/clienti.service';
 import { NewCustomer } from 'src/app/model/new-customer';
 import { ProvinceServiceService } from '../services/province-service.service';
 import { Comune } from 'src/app/model/comune';
+import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
-  selector: 'app-create-customer',
+  selector: 'app-edit-customer',
   template: `
     <div class="container rounded bg-white mt-5 mb-5">
       <div class="row">
@@ -50,8 +52,6 @@ import { Comune } from 'src/app/model/comune';
                     id="nomeContatto"
                     autocomplete="false"
                     class="form-control"
-                    placeholder="Nome"
-                    value=""
                     pattern="^[A-Za-zÁČĎÉĚÍŇÓŘŠŤÚŮÝŽáčďéěíňóřšťúůýžÅÆÉØåæéøÉËÏÓÖÜéëïóöüÄÅÖäåöÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸàâæçéèêëïîôœùûüÿÄÖÜẞäöüßÁÉÍÖÓŐÜÚŰáéíöóőüúűÁÆÐÉÍÓÖÞÚÝáæðéíóöþúýÀÈÉÌÒÓÙàèéìòóùÅÆÂÉÈÊØÓÒÔåæâéèêøóòôĄĆĘŁŃÓŚŹŻąćęłńóśźżÃÁÀÂÇÉÊÍÕÓÔÚÜãáàâçéêíõóôúüĂÂÎŞȘŢȚăâîşșţțÁÉÍÑÓÚÜáéíñóúüÄÅÉÖäåéöÂÇĞIİÎÖŞÜÛâçğıİîöşüû]+(?: [A-Za-zÁČĎÉĚÍŇÓŘŠŤÚŮÝŽáčďéěíňóřšťúůýžÅÆÉØåæéøÉËÏÓÖÜéëïóöüÄÅÖäåöÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸàâæçéèêëïîôœùûüÿÄÖÜẞäöüßÁÉÍÖÓŐÜÚŰáéíöóőüúűÁÆÐÉÍÓÖÞÚÝáæðéíóöþúýÀÈÉÌÒÓÙàèéìòóùÅÆÂÉÈÊØÓÒÔåæâéèêøóòôĄĆĘŁŃÓŚŹŻąćęłńóśźżÃÁÀÂÇÉÊÍÕÓÔÚÜãáàâçéêíõóôúüĂÂÎŞȘŢȚăâîşșţțÁÉÍÑÓÚÜáéíñóúüÄÅÉÖäåéöÂÇĞIİÎÖŞÜÛâçğıİîöşüû]+)*$"
                     [className]="
                       form.controls.nomeContatto.invalid &&
@@ -149,7 +149,6 @@ import { Comune } from 'src/app/model/comune';
                     id="ragioneSociale"
                     autocomplete="false"
                     class="form-control"
-                    placeholder="Ragione Sociale"
                     value=""
                     minlength="3"
                     [className]="
@@ -469,26 +468,32 @@ import { Comune } from 'src/app/model/comune';
     `,
   ],
 })
-export class CreateCustomerComponent implements OnInit {
+export class EditCustomerComponent implements OnInit {
   form!: FormGroup;
-  customer!: NewCustomer;
+  customer!: Customer;
   currentDate!: any;
   legione!: NewCustomer;
   city!: Comune[];
   citySelected!: number;
   cityLegale!: number;
   items!: any;
+  customerId!: number;
+  customerSelected!: Customer;
 
   constructor(
     private fb: FormBuilder,
     private customerServ: ClientiService,
-    private comuniServ: ProvinceServiceService
+    private comuniServ: ProvinceServiceService,
+
+    private snapRoute: ActivatedRoute,
+    private location: Location
   ) {}
 
   prova(formgroup: any) {
     console.log(formgroup);
     this.form.value.ragioneSociale;
     this.customer = {
+      id: 0,
       ragioneSociale: '',
       partitaIva: '',
       tipoCliente: '',
@@ -526,70 +531,27 @@ export class CreateCustomerComponent implements OnInit {
     this.customer.dataInserimento = this.currentDate.toISOString();
     this.customer.dataUltimoContatto = this.currentDate.toISOString();
 
-    console.log(this.customer);
-
     this.citySelected = formgroup.value.indirizzoSedeOperativa.comune.id;
     this.cityLegale = formgroup.value.indirizzoSedeLegale.comune.id;
     console.log(this.citySelected);
     console.log(this.city[this.citySelected - 1]);
+    this.customer.id = this.customerId;
 
     this.customer.indirizzoSedeOperativa.comune =
       this.city[this.citySelected - 1];
     this.customer.indirizzoSedeLegale.comune = this.city[this.cityLegale - 1];
 
-    /*  this.customer.ragioneSociale = formgroup.value.ragioneSociale;
-    this.customer.partitaIva = formgroup.value.partitaIva;
-    this.customer.tipoCliente = formgroup.value.tipoCliente;
-    this.customer.email = formgroup.value.email;
-    this.customer.pec = formgroup.value.pec;
-    this.customer.telefono = formgroup.value.telefono;
-    this.customer.nomeContatto = formgroup.value.nomeContatto;
-    this.customer.cognomeContatto = formgroup.value.cognomeContatto;
-    this.customer.telefonoContatto = formgroup.value.telefonoContatto;
-    this.customer.emailContatto = formgroup.value.emailContatto;
-
-    this.customer.indirizzoSedeOperativa.via =
-      formgroup.value.indirizzoSedeOperativa.via;
-    this.customer.indirizzoSedeOperativa.civico =
-      formgroup.value.indirizzoSedeOperativa.civico;
-    this.customer.indirizzoSedeOperativa.cap =
-      formgroup.value.indirizzoSedeOperativa.cap;
-    this.customer.indirizzoSedeOperativa.localita =
-      formgroup.value.indirizzoSedeOperativa.localita;
-    this.customer.indirizzoSedeOperativa.comune.nome =
-      formgroup.value.indirizzoSedeOperativa.comune.nome;
-    this.customer.indirizzoSedeOperativa.comune.provincia.sigla =
-      formgroup.value.indirizzoSedeOperativa.comune.provincia.sigla;
-    this.customer.indirizzoSedeOperativa.comune.provincia.sigla =
-      formgroup.value.indirizzoSedeOperativa.comune.provincia.sigla;
-
-    this.customer.indirizzoSedeLegale.via =
-      formgroup.value.indirizzoSedeLegale.via;
-    this.customer.indirizzoSedeLegale.civico =
-      formgroup.value.indirizzoSedeLegale.civico;
-    this.customer.indirizzoSedeLegale.cap =
-      formgroup.value.indirizzoSedeLegale.cap;
-    this.customer.indirizzoSedeLegale.localita =
-      formgroup.value.indirizzoSedeLegale.localita;
-    this.customer.indirizzoSedeLegale.comune.nome =
-      formgroup.value.indirizzoSedeLegale.comune.nome;
-    this.customer.indirizzoSedeLegale.comune.provincia.nome =
-      formgroup.value.indirizzoSedeLegale.comune.provincia.nome;
-    this.customer.indirizzoSedeLegale.comune.provincia.sigla =
-      formgroup.value.indirizzoSedeLegale.comune.provincia.sigla; */
-
     console.log(this.customer);
-    console.log(this.legione);
-    this.addCustomer(this.customer);
-  }
 
-  addCustomer(cliente: any) {
-    this.customerServ.createCustomer(cliente).subscribe((response) => {
-      console.log(response);
-    });
+    this.customerServ
+      .updateCustomer(this.customer, this.customerId)
+      .subscribe();
   }
 
   ngOnInit(): void {
+    this.getAllComuni();
+    this.loadUser();
+
     this.form = this.fb.group({
       ragioneSociale: new FormControl('', Validators.required),
       partitaIva: new FormControl('', Validators.required),
@@ -622,8 +584,77 @@ export class CreateCustomerComponent implements OnInit {
         }),
       }),
     });
+  }
 
-    this.getAllComuni();
+  loadUser() {
+    this.customerId = this.snapRoute.snapshot.params['id'];
+    this.customerServ.getById(this.customerId).subscribe((response) => {
+      this.customerSelected = response;
+      console.log(this.customerSelected);
+      console.log(this.customerSelected.ragioneSociale);
+      this.form.controls['ragioneSociale'].patchValue(
+        this.customerSelected.ragioneSociale
+      );
+      this.form.controls['partitaIva'].patchValue(
+        this.customerSelected.partitaIva
+      );
+      this.form.controls['email'].patchValue(this.customerSelected.email);
+      this.form.controls['tipoCliente'].patchValue(
+        this.customerSelected.tipoCliente
+      );
+      this.form.controls['pec'].patchValue(this.customerSelected.pec);
+      this.form.controls['telefono'].patchValue(this.customerSelected.telefono);
+      this.form.controls['nomeContatto'].patchValue(
+        this.customerSelected.nomeContatto
+      );
+      this.form.controls['cognomeContatto'].patchValue(
+        this.customerSelected.cognomeContatto
+      );
+      this.form.controls['emailContatto'].patchValue(
+        this.customerSelected.emailContatto
+      );
+      this.form.controls['telefonoContatto'].patchValue(
+        this.customerSelected.telefonoContatto
+      );
+      const groupOp: FormGroup = this.form.get(
+        'indirizzoSedeOperativa'
+      ) as FormGroup;
+      groupOp.controls['via'].patchValue(
+        this.customerSelected.indirizzoSedeOperativa.via
+      );
+      groupOp.controls['civico'].patchValue(
+        this.customerSelected.indirizzoSedeOperativa.civico
+      );
+      groupOp.controls['cap'].patchValue(
+        this.customerSelected.indirizzoSedeOperativa.cap
+      );
+      groupOp.controls['localita'].patchValue(
+        this.customerSelected.indirizzoSedeOperativa.localita
+      );
+      const groupComune: FormGroup = groupOp.get('comune') as FormGroup;
+      groupComune.controls['id'].patchValue(
+        this.customerSelected.indirizzoSedeOperativa.comune.id
+      );
+      const groupLeg: FormGroup = this.form.get(
+        'indirizzoSedeLegale'
+      ) as FormGroup;
+      groupLeg.controls['via'].patchValue(
+        this.customerSelected.indirizzoSedeLegale.via
+      );
+      groupLeg.controls['civico'].patchValue(
+        this.customerSelected.indirizzoSedeLegale.civico
+      );
+      groupLeg.controls['cap'].patchValue(
+        this.customerSelected.indirizzoSedeLegale.cap
+      );
+      groupLeg.controls['localita'].patchValue(
+        this.customerSelected.indirizzoSedeLegale.localita
+      );
+      const groupComuneLeg: FormGroup = groupLeg.get('comune') as FormGroup;
+      groupComuneLeg.controls['id'].patchValue(
+        this.customerSelected.indirizzoSedeLegale.comune.id
+      );
+    });
   }
 
   getAllComuni() {

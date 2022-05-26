@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { InvoiceService } from '../services/invoice.service';
+import { StatoFattura } from 'src/app/model/stato-fattura';
 
 @Component({
   selector: 'app-invoices',
@@ -62,7 +63,7 @@ import { InvoiceService } from '../services/invoice.service';
                       <label
                         class="btn btn-outline-primary"
                         for="btncheck1"
-                        [routerLink]="['/clienti']"
+                        [routerLink]="['/fatture', fattura.id]"
                         ><i class="bi bi-file-earmark-person-fill"></i
                       ></label>
 
@@ -72,7 +73,10 @@ import { InvoiceService } from '../services/invoice.service';
                         id="btncheck2"
                         autocomplete="off"
                       />
-                      <label class="btn btn-outline-warning" for="btncheck2"
+                      <label
+                        class="btn btn-outline-warning"
+                        for="btncheck2"
+                        [routerLink]="['/editfatture', fattura.id]"
                         ><i class="bi bi-pencil-fill"></i
                       ></label>
 
@@ -82,7 +86,10 @@ import { InvoiceService } from '../services/invoice.service';
                         id="btncheck3"
                         autocomplete="off"
                       />
-                      <label class="btn btn-outline-danger" for="btncheck3"
+                      <label
+                        class="btn btn-outline-danger"
+                        for="btncheck3"
+                        (click)="deleteInvoice(fattura.id)"
                         ><i class="bi bi-x-circle-fill"></i
                       ></label>
                     </div>
@@ -125,6 +132,12 @@ export class InvoicesComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllInvoices();
+  }
+
+  deleteInvoice(id: number) {
+    this.invoiceServ.deleteInvoice(id).subscribe(() => {
+      this.getAllInvoices();
+    });
   }
 
   getAllInvoices() {

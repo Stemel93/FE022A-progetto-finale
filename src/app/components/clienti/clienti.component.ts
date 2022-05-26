@@ -22,7 +22,15 @@ import { ClientiService } from '../services/clienti.service';
 
         <div class="row my-5">
           <h3 class="fs-4 mb-3">Recent Orders</h3>
+
           <div class="col">
+            <button
+              type="button"
+              class="btn btn-success w-25 fw-bold"
+              [routerLink]="['/newcustomer']"
+            >
+              <i class="bi bi-plus-lg"></i> Aggiungi Cliente
+            </button>
             <table class="table bg-white rounded shadow-sm  table-hover">
               <thead>
                 <tr>
@@ -63,7 +71,23 @@ import { ClientiService } from '../services/clienti.service';
                         id="btncheck2"
                         autocomplete="off"
                       />
-                      <label class="btn btn-outline-warning" for="btncheck2"
+                      <label
+                        class="btn btn-outline-success"
+                        for="btncheck2"
+                        [routerLink]="['/newfatture', cliente.id]"
+                        ><i class="bi bi-plus-square"></i
+                      ></label>
+
+                      <input
+                        type="checkbox"
+                        class="btn-check"
+                        id="btncheck2"
+                        autocomplete="off"
+                      />
+                      <label
+                        class="btn btn-outline-warning"
+                        for="btncheck2"
+                        [routerLink]="['/editclienti', cliente.id]"
                         ><i class="bi bi-pencil-fill"></i
                       ></label>
 
@@ -73,7 +97,10 @@ import { ClientiService } from '../services/clienti.service';
                         id="btncheck3"
                         autocomplete="off"
                       />
-                      <label class="btn btn-outline-danger" for="btncheck3"
+                      <label
+                        class="btn btn-outline-danger"
+                        for="btncheck3"
+                        (click)="deleteCliente(cliente.id)"
                         ><i class="bi bi-x-circle-fill"></i
                       ></label>
                     </div>
@@ -83,8 +110,8 @@ import { ClientiService } from '../services/clienti.service';
             </table>
             <nav aria-label="..." class="mx-auto">
               <ul class="pagination">
-                <li class="page-item disabled">
-                  <a class="page-link">Inizio</a>
+                <li class="page-item">
+                  <a class="page-link" (click)="firstPage()">Inizio</a>
                 </li>
                 <li class="page-item">
                   <a class="page-link" id="1" (click)="onTableDataChange(0)"
@@ -110,7 +137,7 @@ import { ClientiService } from '../services/clienti.service';
                   >
                 </li>
                 <li class="page-item">
-                  <a class="page-link" href="#">Fine</a>
+                  <a class="page-link" (click)="lastPage()">Fine</a>
                 </li>
               </ul>
             </nav>
@@ -137,6 +164,11 @@ import { ClientiService } from '../services/clienti.service';
         background-color: #0d6efd;
         color: white;
       }
+      .page-link {
+        cursor: pointer;
+      }
+
+      /* btn new */
     `,
   ],
 })
@@ -144,23 +176,41 @@ export class ClientiComponent implements OnInit {
   page: any = 0;
   items!: any;
   clienti!: any;
-
+  clientiTotali!: any;
+  numClienti!: number;
+  itemsTotali!: any;
   elements!: any;
+
+  array: any;
 
   constructor(private custServ: ClientiService) {}
 
   ngOnInit(): void {
     this.getAllClients();
+    this.getAllClientsNoPage();
   }
 
   getAllClients() {
     this.custServ.getAll(this.page).subscribe((data) => {
       this.items = data;
       this.clienti = this.items.content;
-      console.log(this.items);
-      console.log(this.clienti);
+
+      /*  console.log(this.clienti); */
       this.page = 0;
-      console.log(this.elements);
+    });
+  }
+
+  deleteCliente(id: number) {
+    this.custServ.deleteCustomer(id).subscribe(() => {
+      this.getAllClients();
+    });
+  }
+
+  getAllClientsNoPage() {
+    this.custServ.getAllNoPage().subscribe((data) => {
+      this.itemsTotali = data;
+      this.clientiTotali = this.itemsTotali.content;
+      this.numClienti = this.clientiTotali.length;
     });
   }
 
@@ -172,6 +222,18 @@ export class ClientiComponent implements OnInit {
       element?.classList.remove('aactive');
     }
     this.elements.classList.add('aactive');
+    this.getAllClients();
+  }
+
+  lastPage() {
+    this.page = Math.floor(this.numClienti / 20);
+
+    this.getAllClients();
+    console.log(this.page);
+  }
+
+  firstPage() {
+    this.page = 0;
     this.getAllClients();
   }
 }

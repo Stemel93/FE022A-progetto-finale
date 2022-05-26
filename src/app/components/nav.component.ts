@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../auth/auth.service';
+import { User } from '../model/user';
 
 @Component({
   selector: 'app-nav',
@@ -15,38 +17,44 @@ import { Component, OnInit } from '@angular/core';
         <div class="list-group list-group-flush my-3">
           <a
             [routerLink]="['/']"
+            *ngIf="userLogged"
             class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
             ><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a
           >
           <a
             [routerLink]="['/clienti']"
+            *ngIf="userLogged"
             class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
             ><i class="fas fa-project-diagram me-2"></i>Clienti</a
           >
           <a
-            [routerLink]="['']"
+            [routerLink]="['/users']"
+            *ngIf="userLogged"
             class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
             ><i class="fas fa-users me-2"></i>Users</a
           >
           <a
-            href="#"
-            class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
+            *ngIf="userLogged"
+            class="list-group-item list-group-item-action bg-transparent second-text fw-bold logoutBtn"
             ><i class="fas fa-chart-line me-2"></i>Analytics</a
           >
           <a
             [routerLink]="['/fatture']"
+            *ngIf="userLogged"
             class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
             ><i class="fas fa-paperclip me-2"></i>Fatture</a
           >
 
           <a
-            href="#"
+            [routerLink]="['/login']"
+            *ngIf="!userLogged"
             class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
             ><i class="fas fa-globe me-2"></i>Login</a
           >
           <a
-            href="#"
-            class="list-group-item list-group-item-action bg-transparent text-danger fw-bold"
+            (click)="logoutBtn()"
+            *ngIf="userLogged"
+            class="list-group-item list-group-item-action bg-transparent text-danger fw-bold logoutBtn"
             ><i class="fas fa-power-off me-2"></i>Logout</a
           >
         </div>
@@ -60,11 +68,11 @@ import { Component, OnInit } from '@angular/core';
         >
           <div class="d-flex align-items-center">
             <i
-              class="fas fa-align-left primary-text fs-4 me-3"
+              class="fas fa-align-left primary-text fs-4 me-3 "
               id="menu-toggle"
               (click)="toggleButton()"
             ></i>
-            <h2 class="fs-2 m-0 text-success">Dashboard</h2>
+            <h2 class="fs-2 m-0 text-success">Boise Cascade Corporation</h2>
           </div>
 
           <button
@@ -83,6 +91,7 @@ import { Component, OnInit } from '@angular/core';
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
               <li class="nav-item dropdown">
                 <a
+                  *ngIf="userLogged"
                   class="nav-link dropdown-toggle second-text fw-bold text-success"
                   href="#"
                   id="navbarDropdown"
@@ -90,7 +99,8 @@ import { Component, OnInit } from '@angular/core';
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <i class="fas fa-user me-2 text-success"></i>Mauro Migliorino
+                  <i class="fas fa-user me-2 text-success"></i
+                  >{{ userLogged.username }}
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li>
@@ -104,7 +114,9 @@ import { Component, OnInit } from '@angular/core';
                     >
                   </li>
                   <li>
-                    <a class="dropdown-item text-success fw-bold" href="#"
+                    <a
+                      class="dropdown-item text-success fw-bold logoutBtn"
+                      (click)="logoutBtn()"
                       >Logout</a
                     >
                   </li>
@@ -197,6 +209,10 @@ import { Component, OnInit } from '@angular/core';
         border: none;
       }
 
+      .logoutBtn {
+        cursor: pointer;
+      }
+
       @media (min-width: 768px) {
         #sidebar-wrapper {
           margin-left: 0;
@@ -216,12 +232,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavComponent implements OnInit {
   toggleNav: boolean = true;
+  userLogged!: User | null;
 
   toggleButton() {
     this.toggleNav = !this.toggleNav;
   }
 
-  constructor() {}
+  constructor(private authSrv: AuthService) {}
 
-  ngOnInit(): void {}
+  logoutBtn() {
+    this.authSrv.logout();
+    /* this.authSrv.user$.subscribe((user) => {
+      localStorage.getItem('user');
+      this.userLogged = user;
+    }); */
+  }
+
+  ngOnInit(): void {
+    this.authSrv.user$.subscribe((user) => {
+      localStorage.getItem('user');
+      this.userLogged = user;
+    });
+  }
 }

@@ -1,6 +1,6 @@
 import { Comune } from './comune';
 export interface Sede {
-  id: number;
+  id?: number;
   via: string;
   civico: string;
   cap: string;

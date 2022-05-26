@@ -15,6 +15,12 @@ import { TokenInterceptor } from './auth/token.interceptor';
 import { DetailscustomerComponent } from './components/clienti/detailscustomer.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { DetailsInvoiceComponent } from './components/invoice/details-invoice.component';
+import { EditInvoiceComponent } from './components/invoice/edit-invoice.component';
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { EditCustomerComponent } from './components/clienti/edit-customer.component';
+import { LoginComponent } from './auth/login.component';
+import { SignupComponent } from './auth/signup.component';
 
 @NgModule({
   declarations: [
@@ -28,12 +34,18 @@ import { DetailsInvoiceComponent } from './components/invoice/details-invoice.co
     UsersComponent,
     DetailscustomerComponent,
     DetailsInvoiceComponent,
+    EditInvoiceComponent,
+    EditCustomerComponent,
+    LoginComponent,
+    SignupComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     NgxPaginationModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [
     {

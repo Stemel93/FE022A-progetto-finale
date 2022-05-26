@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Invoice } from 'src/app/model/invoice';
 import { ActivatedRoute } from '@angular/router';
 import { InvoiceService } from '../services/invoice.service';
+import { StatoFattura } from 'src/app/model/stato-fattura';
 
 @Component({
   selector: 'app-details-invoice',
@@ -61,24 +62,22 @@ import { InvoiceService } from '../services/invoice.service';
                 <p>{{ invoiceSelected.importo | currency: 'EUR' }}</p>
               </div>
               <div class="col-md-12">
-                <label class="labels fw-bold">Stato Fattura</label>
-                <p
-                  [ngClass]="
-                    invoiceSelected.stato.nome === 'NON PAGATA'
-                      ? 'text-danger'
-                      : 'text-success'
-                  "
-                >
-                  {{ invoiceSelected.stato.nome }}
-                  <i
-                    class=""
-                    [ngClass]="
-                      invoiceSelected.stato.nome === 'NON PAGATA'
-                        ? 'bi bi-exclamation-triangle-fill'
-                        : 'bi bi-check-circle-fill'
-                    "
-                  ></i>
-                </p>
+                <form #form="ngForm" (ngSubmit)="prova(form)">
+                  <label class="labels fw-bold">Stato Fattura</label>
+                  <select
+                    class="form-select"
+                    aria-label="Default select example"
+                    name="state"
+                    ngModel
+                  >
+                    <option disabled>Seleziona Stato Fattura</option>
+                    <option value="1">PAGATA</option>
+                    <option value="2">NON PAGATA</option>
+                  </select>
+                  <button class="btn btn-primary" type="submit">
+                    Conferma
+                  </button>
+                </form>
               </div>
             </div>
           </div>
@@ -88,14 +87,38 @@ import { InvoiceService } from '../services/invoice.service';
   `,
   styles: [],
 })
-export class DetailsInvoiceComponent implements OnInit {
+export class EditInvoiceComponent implements OnInit {
   invoiceId!: number;
   invoiceSelected!: Invoice;
+  /* statusFatture!: StatoFattura[]; */
+  value1 = 'PAGATA';
+  value2 = 'NON PAGATA';
 
   constructor(
     private invoiceServ: InvoiceService,
     private snapRoute: ActivatedRoute
   ) {}
+
+  prova(form: any) {
+    console.log(form.value.state);
+    this.invoiceSelected.stato.id = form.value.state;
+    if (this.invoiceSelected.stato.id == 1) {
+      this.invoiceSelected.stato.nome = 'PAGATA';
+    } else {
+      this.invoiceSelected.stato.nome = 'NON PAGATA';
+    }
+
+    console.log(this.invoiceSelected);
+    this.invoiceServ
+      .nuovo(this.invoiceSelected.id!, this.invoiceSelected)
+      .subscribe();
+  }
+
+  /* currentState() {
+    this.invoiceServ.loadState(0).subscribe((p) => {
+      this.statusFatture = p;
+    });
+  } */
 
   ngOnInit(): void {
     this.invoiceId = this.snapRoute.snapshot.params['id'];
