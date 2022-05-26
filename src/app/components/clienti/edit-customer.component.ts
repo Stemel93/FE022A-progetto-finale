@@ -448,6 +448,7 @@ import { Location } from '@angular/common';
                   class="btn btn-primary profile-button"
                   type="submit"
                   [ngClass]="{ disabled: form.invalid === true }"
+                  (click)="back()"
                 >
                   Aggiungi Utente
                 </button>
@@ -659,7 +660,6 @@ export class EditCustomerComponent implements OnInit {
         this.customerSelected.indirizzoSedeLegale.comune.id
       );
     });
-    this.back();
   }
 
   getAllComuni() {
