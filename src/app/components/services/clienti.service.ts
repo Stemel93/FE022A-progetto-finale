@@ -41,4 +41,10 @@ export class ClientiService {
   getAllUsers() {
     return this.http.get<any>(`${this.URL}/api/users`);
   }
+
+  getByAzienda(ragioneSociale: string) {
+    return this.http.get<any>(
+      `${this.URL}/api/clienti/ragionesociale?nome=${ragioneSociale}`
+    );
+  }
 }

@@ -12,7 +12,7 @@ import { ClientiService } from '../services/clienti.service';
             class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded"
           >
             <div>
-              <h3 class="fs-2">Clienti</h3>
+              <h3 class="fs-2">Users</h3>
             </div>
             <i
               class="fas fa-users me-2 fs-1 primary-text border rounded-full secondary-bg p-3"
@@ -24,13 +24,6 @@ import { ClientiService } from '../services/clienti.service';
           <h3 class="fs-4 mb-3">Recent Orders</h3>
 
           <div class="col">
-            <button
-              type="button"
-              class="btn btn-success w-25 fw-bold"
-              [routerLink]="['/newcustomer']"
-            >
-              <i class="bi bi-plus-lg"></i> Aggiungi Cliente
-            </button>
             <table class="table bg-white rounded shadow-sm  table-hover">
               <thead>
                 <tr>

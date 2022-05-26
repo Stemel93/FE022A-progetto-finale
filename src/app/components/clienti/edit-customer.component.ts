@@ -10,7 +10,7 @@ import { ClientiService } from '../services/clienti.service';
 import { NewCustomer } from 'src/app/model/new-customer';
 import { ProvinceServiceService } from '../services/province-service.service';
 import { Comune } from 'src/app/model/comune';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 
 @Component({
@@ -451,6 +451,9 @@ import { Location } from '@angular/common';
                 >
                   Aggiungi Utente
                 </button>
+                <button class="btn btn-danger" (click)="back()">
+                  Indietro
+                </button>
               </div>
             </div>
           </form>
@@ -486,7 +489,8 @@ export class EditCustomerComponent implements OnInit {
     private comuniServ: ProvinceServiceService,
 
     private snapRoute: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private router: Router
   ) {}
 
   prova(formgroup: any) {
@@ -655,6 +659,7 @@ export class EditCustomerComponent implements OnInit {
         this.customerSelected.indirizzoSedeLegale.comune.id
       );
     });
+    this.back();
   }
 
   getAllComuni() {
@@ -664,5 +669,9 @@ export class EditCustomerComponent implements OnInit {
       console.log(this.items);
       console.log(this.city);
     });
+  }
+
+  back() {
+    this.router.navigate(['/clienti']);
   }
 }

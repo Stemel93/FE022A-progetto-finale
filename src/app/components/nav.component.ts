@@ -18,18 +18,21 @@ import { User } from '../model/user';
           <a
             [routerLink]="['/']"
             *ngIf="userLogged"
+            (click)="toggleButton()"
             class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
             ><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a
           >
           <a
             [routerLink]="['/clienti']"
             *ngIf="userLogged"
+            (click)="toggleButton()"
             class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
             ><i class="fas fa-project-diagram me-2"></i>Clienti</a
           >
           <a
             [routerLink]="['/users']"
             *ngIf="userLogged"
+            (click)="toggleButton()"
             class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
             ><i class="fas fa-users me-2"></i>Users</a
           >
@@ -41,6 +44,7 @@ import { User } from '../model/user';
           <a
             [routerLink]="['/fatture']"
             *ngIf="userLogged"
+            (click)="toggleButton()"
             class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
             ><i class="fas fa-paperclip me-2"></i>Fatture</a
           >
@@ -54,6 +58,7 @@ import { User } from '../model/user';
           <a
             (click)="logoutBtn()"
             *ngIf="userLogged"
+            (click)="toggleButton()"
             class="list-group-item list-group-item-action bg-transparent text-danger fw-bold logoutBtn"
             ><i class="fas fa-power-off me-2"></i>Logout</a
           >
@@ -241,6 +246,7 @@ export class NavComponent implements OnInit {
   constructor(private authSrv: AuthService) {}
 
   logoutBtn() {
+    this.toggleNav = !this.toggleNav;
     this.authSrv.logout();
     /* this.authSrv.user$.subscribe((user) => {
       localStorage.getItem('user');

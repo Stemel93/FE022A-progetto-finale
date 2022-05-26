@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Customer } from 'src/app/model/customer';
 import { ClientiService } from '../services/clienti.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 
 @Component({
@@ -103,6 +103,18 @@ import { Location } from '@angular/common';
                   {{ customerSelected.emailContatto }}
                 </p>
               </div>
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  (click)="modifica()"
+                >
+                  Modifica
+                </button>
+                <button type="button" class="btn btn-primary" (click)="back()">
+                  Indietro
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -118,7 +130,8 @@ export class DetailscustomerComponent implements OnInit {
   constructor(
     private custServ: ClientiService,
     private snapRoute: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -127,5 +140,13 @@ export class DetailscustomerComponent implements OnInit {
       this.customerSelected = response;
       console.log(this.customerSelected);
     });
+  }
+
+  modifica() {
+    this.router.navigate([`/editclienti/${this.customerId}`]);
+  }
+
+  back() {
+    this.router.navigate(['/clienti']);
   }
 }

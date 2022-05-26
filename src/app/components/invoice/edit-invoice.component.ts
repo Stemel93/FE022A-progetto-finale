@@ -3,6 +3,8 @@ import { Invoice } from 'src/app/model/invoice';
 import { ActivatedRoute } from '@angular/router';
 import { InvoiceService } from '../services/invoice.service';
 import { StatoFattura } from 'src/app/model/stato-fattura';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-details-invoice',
@@ -77,6 +79,9 @@ import { StatoFattura } from 'src/app/model/stato-fattura';
                   <button class="btn btn-primary" type="submit">
                     Conferma
                   </button>
+                  <button class="btn btn-danger" (click)="back()">
+                    Indietro
+                  </button>
                 </form>
               </div>
             </div>
@@ -96,7 +101,9 @@ export class EditInvoiceComponent implements OnInit {
 
   constructor(
     private invoiceServ: InvoiceService,
-    private snapRoute: ActivatedRoute
+    private snapRoute: ActivatedRoute,
+    private location: Location,
+    private router: Router
   ) {}
 
   prova(form: any) {
@@ -112,6 +119,8 @@ export class EditInvoiceComponent implements OnInit {
     this.invoiceServ
       .nuovo(this.invoiceSelected.id!, this.invoiceSelected)
       .subscribe();
+
+    this.back();
   }
 
   /* currentState() {
@@ -126,5 +135,9 @@ export class EditInvoiceComponent implements OnInit {
       this.invoiceSelected = response;
       console.log(this.invoiceSelected);
     });
+  }
+
+  back(): void {
+    this.router.navigate(['/fatture']);
   }
 }

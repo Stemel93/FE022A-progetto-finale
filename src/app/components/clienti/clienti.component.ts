@@ -2,6 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ClientiService } from '../services/clienti.service';
 
+import { VoiceRecognitionService } from '../services/voice-recognition.service';
+
+declare const annyang: any;
+
 @Component({
   selector: 'app-clienti',
   template: `
@@ -31,6 +35,50 @@ import { ClientiService } from '../services/clienti.service';
             >
               <i class="bi bi-plus-lg"></i> Aggiungi Cliente
             </button>
+            <!-- mic -->
+
+            <div class="container">
+              <br />
+              <div class="row justify-content-center">
+                <div class="col-12 col-md-10 col-lg-8">
+                  <form
+                    class="card card-sm bg-dark "
+                    #form="ngForm"
+                    (ngSubmit)="search(form)"
+                  >
+                    <div
+                      class="card-body row no-gutters align-items-center bg-dark"
+                    >
+                      <div class="col-auto">
+                        <i class="bi bi-search text-white h4"></i>
+                      </div>
+                      <!--end of col-->
+
+                      <div class="col">
+                        <input
+                          class="form-control form-control-lg form-control-borderless ps-5"
+                          type="search"
+                          placeholder="La ricerca è Case Sensitive"
+                          name="ragioneSociale"
+                          ngModel
+                        />
+                      </div>
+                      <!--end of col-->
+                      <div class="col-auto">
+                        <button class="btn btn-lg btn-success" type="submit">
+                          Cerca Cliente
+                        </button>
+                      </div>
+
+                      <!--end of col-->
+                    </div>
+                  </form>
+                </div>
+                <!--end of col-->
+              </div>
+            </div>
+
+            <!-- mic -->
             <table class="table bg-white rounded shadow-sm  table-hover">
               <thead>
                 <tr>
@@ -167,8 +215,30 @@ import { ClientiService } from '../services/clienti.service';
       .page-link {
         cursor: pointer;
       }
+      /* input */
 
-      /* btn new */
+      .form-control-borderless {
+        border: none;
+      }
+
+      .form-control-borderless:hover,
+      .form-control-borderless:active,
+      .form-control-borderless:focus {
+        border: none;
+        outline: none;
+        box-shadow: none;
+      }
+
+      .bi-search {
+        position: relative;
+        left: 2.5em;
+
+        color: black !important;
+      }
+
+      /*  ::placeholder {
+        padding-left: 1em;
+      } */
     `,
   ],
 })
@@ -183,7 +253,11 @@ export class ClientiComponent implements OnInit {
 
   array: any;
 
-  constructor(private custServ: ClientiService) {}
+  constructor(
+    private custServ: ClientiService,
+
+    private voiceRecognition: VoiceRecognitionService
+  ) {}
 
   ngOnInit(): void {
     this.getAllClients();
@@ -235,5 +309,20 @@ export class ClientiComponent implements OnInit {
   firstPage() {
     this.page = 0;
     this.getAllClients();
+  }
+
+  search(form: any) {
+    console.log(form.value.ragioneSociale);
+    if (form.value.ragioneSociale === '') {
+      this.page = 0;
+      this.getAllClients();
+    } else {
+      this.custServ
+        .getByAzienda(form.value.ragioneSociale)
+        .subscribe((data) => {
+          this.items = data;
+          this.clienti = this.items.content;
+        });
+    }
   }
 }

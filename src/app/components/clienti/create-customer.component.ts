@@ -10,6 +10,7 @@ import { ClientiService } from '../services/clienti.service';
 import { NewCustomer } from 'src/app/model/new-customer';
 import { ProvinceServiceService } from '../services/province-service.service';
 import { Comune } from 'src/app/model/comune';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-customer',
@@ -452,6 +453,9 @@ import { Comune } from 'src/app/model/comune';
                 >
                   Aggiungi Utente
                 </button>
+                <button class="btn btn-danger" (click)="back()">
+                  Indietro
+                </button>
               </div>
             </div>
           </form>
@@ -482,7 +486,8 @@ export class CreateCustomerComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private customerServ: ClientiService,
-    private comuniServ: ProvinceServiceService
+    private comuniServ: ProvinceServiceService,
+    private router: Router
   ) {}
 
   prova(formgroup: any) {
@@ -537,50 +542,10 @@ export class CreateCustomerComponent implements OnInit {
       this.city[this.citySelected - 1];
     this.customer.indirizzoSedeLegale.comune = this.city[this.cityLegale - 1];
 
-    /*  this.customer.ragioneSociale = formgroup.value.ragioneSociale;
-    this.customer.partitaIva = formgroup.value.partitaIva;
-    this.customer.tipoCliente = formgroup.value.tipoCliente;
-    this.customer.email = formgroup.value.email;
-    this.customer.pec = formgroup.value.pec;
-    this.customer.telefono = formgroup.value.telefono;
-    this.customer.nomeContatto = formgroup.value.nomeContatto;
-    this.customer.cognomeContatto = formgroup.value.cognomeContatto;
-    this.customer.telefonoContatto = formgroup.value.telefonoContatto;
-    this.customer.emailContatto = formgroup.value.emailContatto;
-
-    this.customer.indirizzoSedeOperativa.via =
-      formgroup.value.indirizzoSedeOperativa.via;
-    this.customer.indirizzoSedeOperativa.civico =
-      formgroup.value.indirizzoSedeOperativa.civico;
-    this.customer.indirizzoSedeOperativa.cap =
-      formgroup.value.indirizzoSedeOperativa.cap;
-    this.customer.indirizzoSedeOperativa.localita =
-      formgroup.value.indirizzoSedeOperativa.localita;
-    this.customer.indirizzoSedeOperativa.comune.nome =
-      formgroup.value.indirizzoSedeOperativa.comune.nome;
-    this.customer.indirizzoSedeOperativa.comune.provincia.sigla =
-      formgroup.value.indirizzoSedeOperativa.comune.provincia.sigla;
-    this.customer.indirizzoSedeOperativa.comune.provincia.sigla =
-      formgroup.value.indirizzoSedeOperativa.comune.provincia.sigla;
-
-    this.customer.indirizzoSedeLegale.via =
-      formgroup.value.indirizzoSedeLegale.via;
-    this.customer.indirizzoSedeLegale.civico =
-      formgroup.value.indirizzoSedeLegale.civico;
-    this.customer.indirizzoSedeLegale.cap =
-      formgroup.value.indirizzoSedeLegale.cap;
-    this.customer.indirizzoSedeLegale.localita =
-      formgroup.value.indirizzoSedeLegale.localita;
-    this.customer.indirizzoSedeLegale.comune.nome =
-      formgroup.value.indirizzoSedeLegale.comune.nome;
-    this.customer.indirizzoSedeLegale.comune.provincia.nome =
-      formgroup.value.indirizzoSedeLegale.comune.provincia.nome;
-    this.customer.indirizzoSedeLegale.comune.provincia.sigla =
-      formgroup.value.indirizzoSedeLegale.comune.provincia.sigla; */
-
     console.log(this.customer);
     console.log(this.legione);
     this.addCustomer(this.customer);
+    this.back();
   }
 
   addCustomer(cliente: any) {
@@ -633,5 +598,9 @@ export class CreateCustomerComponent implements OnInit {
       console.log(this.items);
       console.log(this.city);
     });
+  }
+
+  back() {
+    this.router.navigate(['/clienti']);
   }
 }

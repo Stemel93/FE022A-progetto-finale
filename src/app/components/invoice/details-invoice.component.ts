@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Invoice } from 'src/app/model/invoice';
 import { ActivatedRoute } from '@angular/router';
 import { InvoiceService } from '../services/invoice.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-details-invoice',
@@ -79,6 +80,9 @@ import { InvoiceService } from '../services/invoice.service';
                     "
                   ></i>
                 </p>
+                <button class="btn btn-primary w-25 float-end" (click)="back()">
+                  Indietro
+                </button>
               </div>
             </div>
           </div>
@@ -94,7 +98,8 @@ export class DetailsInvoiceComponent implements OnInit {
 
   constructor(
     private invoiceServ: InvoiceService,
-    private snapRoute: ActivatedRoute
+    private snapRoute: ActivatedRoute,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -103,5 +108,9 @@ export class DetailsInvoiceComponent implements OnInit {
       this.invoiceSelected = response;
       console.log(this.invoiceSelected);
     });
+  }
+
+  back() {
+    this.location.back();
   }
 }

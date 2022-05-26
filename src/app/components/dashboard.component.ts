@@ -182,7 +182,7 @@ import { InvoiceService } from './services/invoice.service';
         </div>
       </div>
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4" [routerLink]="['/fatture']">
           <div class="box">
             <div class="our-services backups">
               <div class="icon">
@@ -193,7 +193,7 @@ import { InvoiceService } from './services/invoice.service';
             </div>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" [routerLink]="['/users']">
           <div class="box">
             <div class="our-services ssl">
               <div class="icon">
@@ -204,7 +204,7 @@ import { InvoiceService } from './services/invoice.service';
             </div>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" [routerLink]="['/clienti']">
           <div class="box">
             <div class="our-services database">
               <div class="icon">

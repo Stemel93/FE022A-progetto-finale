@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Invoice } from 'src/app/model/invoice';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceService } from '../services/invoice.service';
 import { ClientiService } from '../services/clienti.service';
 import { Customer } from 'src/app/model/customer';
@@ -134,6 +134,9 @@ import {
                     >
                       Salva Fattura
                     </button>
+                    <button class="btn btn-danger" (click)="back()">
+                      Indietro
+                    </button>
 
                     <!-- inizio modale -->
 
@@ -261,7 +264,8 @@ export class CreateInvoiceComponent implements OnInit {
     private invoiceServ: InvoiceService,
     private snapRoute: ActivatedRoute,
     private custServ: ClientiService,
-    private location: Location
+    private location: Location,
+    private router: Router
   ) {}
 
   prova(form: any) {
@@ -307,6 +311,9 @@ export class CreateInvoiceComponent implements OnInit {
 
   backs(): void {
     this.location.back();
+  }
+  back() {
+    this.router.navigate(['/clienti']);
   }
 
   /* currentState() {
