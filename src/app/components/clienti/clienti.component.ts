@@ -4,9 +4,8 @@ import { ClientiService } from '../services/clienti.service';
 
 import { VoiceRecognitionService } from '../services/voice-recognition.service';
 
-declare const annyang: any;
-
 @Component({
+  providers: [VoiceRecognitionService],
   selector: 'app-clienti',
   template: `
     <div class="container-fluid px-4">
@@ -28,19 +27,21 @@ declare const annyang: any;
           <h3 class="fs-4 mb-3">Recent Orders</h3>
 
           <div class="col">
-            <button
-              type="button"
-              class="btn btn-success w-25 fw-bold"
-              [routerLink]="['/newcustomer']"
-            >
-              <i class="bi bi-plus-lg"></i> Aggiungi Cliente
-            </button>
             <!-- mic -->
 
             <div class="container">
               <br />
               <div class="row justify-content-center">
+                <!-- mic -->
+
+                <!-- mic -->
                 <div class="col-12 col-md-10 col-lg-8">
+                  <button class="btn btn-primary ms-5" (click)="startService()">
+                    <i class="bi bi-mic-fill"></i>
+                  </button>
+                  <button class="btn btn-danger" (click)="stopService()">
+                    <i class="bi bi-mic-mute-fill"></i>
+                  </button>
                   <form
                     class="card card-sm bg-dark "
                     #form="ngForm"
@@ -57,7 +58,8 @@ declare const annyang: any;
                       <div class="col">
                         <input
                           class="form-control form-control-lg form-control-borderless ps-5"
-                          type="search"
+                          type="text"
+                          value="{{ service.text }}"
                           placeholder="La ricerca è Case Sensitive"
                           name="ragioneSociale"
                           ngModel
@@ -79,6 +81,13 @@ declare const annyang: any;
             </div>
 
             <!-- mic -->
+            <button
+              type="button"
+              class="btn btn-success w-25 fw-bold"
+              [routerLink]="['/newcustomer']"
+            >
+              <i class="bi bi-plus-lg"></i> Aggiungi Cliente
+            </button>
             <table class="table bg-white rounded shadow-sm  table-hover">
               <thead>
                 <tr>
@@ -250,14 +259,19 @@ export class ClientiComponent implements OnInit {
   numClienti!: number;
   itemsTotali!: any;
   elements!: any;
+  vocale!: string;
 
   array: any;
+
+  text!: string;
 
   constructor(
     private custServ: ClientiService,
 
-    private voiceRecognition: VoiceRecognitionService
-  ) {}
+    public service: VoiceRecognitionService
+  ) {
+    this.service.init();
+  }
 
   ngOnInit(): void {
     this.getAllClients();
@@ -313,16 +327,31 @@ export class ClientiComponent implements OnInit {
 
   search(form: any) {
     console.log(form.value.ragioneSociale);
+    form.value.ragioneSociale = this.vocale;
     if (form.value.ragioneSociale === '') {
       this.page = 0;
       this.getAllClients();
     } else {
+      form.value.ragioneSociale = this.service.text;
       this.custServ
         .getByAzienda(form.value.ragioneSociale)
         .subscribe((data) => {
           this.items = data;
           this.clienti = this.items.content;
         });
+      this.vocale = '';
     }
+  }
+
+  /* mic */
+
+  startService() {
+    this.service.start();
+    this.service.text = '';
+  }
+
+  stopService() {
+    this.service.stop();
+    this.vocale = this.service.text;
   }
 }
