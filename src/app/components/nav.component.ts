@@ -15,53 +15,55 @@ import { User } from '../model/user';
           <i class="fas fa-user-secret me-2"></i>IamCRM
         </div>
         <div class="list-group list-group-flush my-3">
-          <a
-            [routerLink]="['/']"
-            *ngIf="userLogged"
-            (click)="toggleButton()"
-            class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
-            ><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a
-          >
-          <a
-            [routerLink]="['/clienti']"
-            *ngIf="userLogged"
-            (click)="toggleButton()"
-            class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
-            ><i class="fas fa-project-diagram me-2"></i>Clienti</a
-          >
-          <a
-            [routerLink]="['/users']"
-            *ngIf="userLogged"
-            (click)="toggleButton()"
-            class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
-            ><i class="fas fa-users me-2"></i>Users</a
-          >
-          <a
-            *ngIf="userLogged"
-            class="list-group-item list-group-item-action bg-transparent second-text fw-bold logoutBtn"
-            ><i class="fas fa-chart-line me-2"></i>Analytics</a
-          >
-          <a
-            [routerLink]="['/fatture']"
-            *ngIf="userLogged"
-            (click)="toggleButton()"
-            class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
-            ><i class="fas fa-paperclip me-2"></i>Fatture</a
-          >
+          <div class="sidebarBtn">
+            <a
+              [routerLink]="['/']"
+              *ngIf="userLogged"
+              (click)="toggleButton()"
+              class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
+              ><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a
+            >
+            <a
+              [routerLink]="['/clienti']"
+              *ngIf="userLogged"
+              (click)="toggleButton()"
+              class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
+              ><i class="fas fa-project-diagram me-2"></i>Clienti</a
+            >
+            <a
+              [routerLink]="['/users']"
+              *ngIf="userLogged"
+              (click)="toggleButton()"
+              class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
+              ><i class="fas fa-users me-2"></i>Users</a
+            >
+            <a
+              *ngIf="userLogged"
+              class="list-group-item list-group-item-action bg-transparent second-text fw-bold logoutBtn"
+              ><i class="fas fa-chart-line me-2"></i>Analytics</a
+            >
+            <a
+              [routerLink]="['/fatture']"
+              *ngIf="userLogged"
+              (click)="toggleButton()"
+              class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
+              ><i class="fas fa-paperclip me-2"></i>Fatture</a
+            >
 
-          <a
-            [routerLink]="['/login']"
-            *ngIf="!userLogged"
-            class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
-            ><i class="fas fa-globe me-2"></i>Login</a
-          >
-          <a
-            (click)="logoutBtn()"
-            *ngIf="userLogged"
-            (click)="toggleButton()"
-            class="list-group-item list-group-item-action bg-transparent text-danger fw-bold logoutBtn"
-            ><i class="fas fa-power-off me-2"></i>Logout</a
-          >
+            <a
+              [routerLink]="['/login']"
+              *ngIf="!userLogged"
+              class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
+              ><i class="fas fa-globe me-2"></i>Login</a
+            >
+            <a
+              (click)="logoutBtn()"
+              *ngIf="userLogged"
+              (click)="toggleButton()"
+              class="list-group-item list-group-item-action bg-transparent text-danger fw-bold logoutBtn"
+              ><i class="fas fa-power-off me-2"></i>Logout</a
+            >
+          </div>
         </div>
       </div>
       <!-- /#sidebar-wrapper -->
@@ -72,12 +74,18 @@ import { User } from '../model/user';
           class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4"
         >
           <div class="d-flex align-items-center">
-            <i
-              class="fas fa-align-left primary-text fs-4 me-3 "
+            <button
+              type="button"
+              class="btn btn-light "
               id="menu-toggle"
               (click)="toggleButton()"
-            ></i>
-            <h2 class="fs-2 m-0 text-success">Boise Cascade Corporation</h2>
+            >
+              <i class="bi bi-card-list primary-text fs-4 "></i>
+            </button>
+
+            <h2 class="fs-2 m-0 text-success ms-5 ps-5">
+              Boise Cascade Corporation
+            </h2>
           </div>
 
           <button
@@ -107,7 +115,11 @@ import { User } from '../model/user';
                   <i class="fas fa-user me-2 text-success"></i
                   >{{ userLogged.username }}
                 </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <ul
+                  class="dropdown-menu"
+                  aria-labelledby="navbarDropdown"
+                  *ngIf="userLogged"
+                >
                   <li>
                     <a class="dropdown-item text-success fw-bold" href="#"
                       >Profilo</a
@@ -167,6 +179,10 @@ import { User } from '../model/user';
         border-radius: 100%;
       }
 
+      .sidebarBtn {
+        position: fixed;
+      }
+
       #wrapper {
         overflow-x: hidden;
         background-color: black;
@@ -200,6 +216,9 @@ import { User } from '../model/user';
 
       #menu-toggle {
         cursor: pointer;
+        position: fixed;
+        z-index: 1000;
+        border-radius: 50%;
       }
 
       .list-group-item {
